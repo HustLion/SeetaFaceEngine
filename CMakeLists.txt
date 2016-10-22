@@ -1,0 +1,128 @@
+project(SeetaFaceEngine)
+
+cmake_minimum_required(VERSION 2.8.12)
+
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
+
+set(SEETA_FACE_ENGINE_VERSION "master" CACHE STRING "Version name of Seeta Face Engine")
+# Build options
+option(USE_OPENMP      "Set to ON to build use openmp"  ON)
+option(USE_SSE         "Set to ON to build use SSE"  ON)
+option(BUILD_TESTS     "Set to ON to build tests"  ON)
+option(BUILD_EXAMPLES  "Set to ON to build examples"  ON)
+# Use C++11
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+message(STATUS "C++11 support has been enabled by default.")
+
+if(NOT ${CMAKE_VERSION} VERSION_LESS 3.1)
+    set(CMAKE_CXX_STANDARD 11)
+else()
+    set(CMAKE_CXX_FLAGS "-std=c++11")
+endif()
+
+
+# Use SSE
+if (USE_SSE)
+    add_definitions(-DUSE_SSE)
+    message(STATUS "Use SSE")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse4.1")
+endif()
+
+# Use OpenMP
+if (USE_OPENMP)
+    find_package(OpenMP QUIET)
+    if (OPENMP_FOUND)
+        message(STATUS "Use OpenMP")
+        add_definitions(-DUSE_OPENMP)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+    endif()
+endif()
+
+# Add a compiler flag to check the output for insane values if we are in debug mode.
+if(CMAKE_BUILD_TYPE MATCHES DEBUG)
+	message(STATUS "Building debug release of SeetaFaceEngine.")
+	add_definitions(-DASSERT_INSANE_OUTPUT)
+endif()
+
+# Add warnings
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+
+if(NOT APPLE AND NOT WIN32)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++")
+endif()
+
+# Common setup
+include_directories(${CMAKE_CURRENT_BINARY_DIR} lib)
+include_directories(vendor)
+include_directories(include)
+
+# Build detection library
+file(GLOB_RECURSE dtc_SRCS "src/detection/*.cpp")
+file(GLOB_RECURSE dtc_HEADERS "src/detection/*.h")
+
+set (dtc_INCLUDE_DIRS "")
+foreach (_headerFile ${dtc_HEADERS})
+    get_filename_component(_dir ${_headerFile} PATH)
+    list (APPEND dtc_INCLUDE_DIRS ${_dir})
+endforeach()
+list(REMOVE_DUPLICATES dtc_INCLUDE_DIRS)
+
+include_directories(${dtc_INCLUDE_DIRS})
+
+add_library(seeta_facedet_lib SHARED ${dtc_SRCS})
+set(facedet_required_libs seeta_facedet_lib)
+
+add_custom_command(TARGET seeta_facedet_lib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources ${CMAKE_BINARY_DIR}/resources) 
+
+# List of tests. For each test there must be a file tests/${NAME}.cpp and a file tests/${NAME}.h.
+set(engine_TEST
+	detection
+    alignment
+)
+
+
+# Compiling the test environment.
+# if (BUILD_TESTS)
+#     message(STATUS "Building tests...")
+#     enable_testing()
+#     foreach (test ${engine_TEST})
+#         add_executable(${test} tests/main.cpp tests/${test}.cpp)
+#         add_test(${test} ${test})
+#     endforeach()
+# endif()
+
+
+#add_custom_command(TARGET SeetaFaceEngine POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:${PROJECT}>/resources) 
+
+# Build examples
+set(eg_model ${CMAKE_BINARY_DIR}/resources/model)
+set(eg_img ${CMAKE_BINARY_DIR}/resources/img)
+set(dtc_model ${eg_model}/seeta_fd_frontal_v1.0.bin)
+set(alg_model ${eg_model}/seeta_fa_v1.1.bin)
+set(vrf_model ${eg_model}/seeta_fr_v1.0.bin)
+if (BUILD_EXAMPLES)
+    message(STATUS "Build with examples.")
+    find_package(OpenCV)
+    if (NOT OpenCV_FOUND)
+        message(WARNING "OpenCV not found. Test will not be built.")
+    else()
+        include_directories(${OpenCV_INCLUDE_DIRS})
+        list(APPEND facedet_required_libs ${OpenCV_LIBS})
+        add_executable(facedet_test examples/facedetection_test.cpp)
+        target_link_libraries(facedet_test ${facedet_required_libs})
+        enable_testing()
+        add_test(DetectionTest ${EXECUTABLE_OUTPUT_PATH}/facedet_test ${eg_img}/image_0001.png ${dtc_model})
+    endif()
+endif()
+
+
+
+# Installing SeetaFaceEngine.
+# include(GNUInstallDirs)
+# install(TARGETS SeetaFaceEngine DESTINATION ${CMAKE_INSTALL_BINDIR})
+# include(CPackConfig.cmake)
+
