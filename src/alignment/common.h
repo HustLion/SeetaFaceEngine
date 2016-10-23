@@ -33,7 +33,7 @@
 #define SEETA_COMMON_H_
 
 #include <cstdint>
-
+#include <cstdlib>
 #if defined (_MSC_VER) || defined (_WIN32) || defined (_WIN64)
   #ifdef SEETA_EXPORTS
     #define  SEETA_API __declspec(dllexport)

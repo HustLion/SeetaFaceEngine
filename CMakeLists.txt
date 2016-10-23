@@ -78,6 +78,24 @@ set(facedet_required_libs seeta_facedet_lib)
 
 add_custom_command(TARGET seeta_facedet_lib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources ${CMAKE_BINARY_DIR}/resources) 
 
+# Build alignment library
+
+file(GLOB_RECURSE alg_SRCS "src/alignment/*.cpp")
+file(GLOB_RECURSE alg_HEADERS "src/alignment/*.h")
+
+set (alg_INCLUDE_DIRS "")
+foreach (_headerFile ${alg_HEADERS})
+    get_filename_component(_dir ${_headerFile} PATH)
+    list (APPEND alg_INCLUDE_DIRS ${_dir})
+endforeach()
+list(REMOVE_DUPLICATES alg_INCLUDE_DIRS)
+
+include_directories(${alg_INCLUDE_DIRS})
+
+
+add_library(seeta_fa_lib SHARED ${alg_SRCS})
+set(fa_required_libs seeta_fa_lib)
+
 # List of tests. For each test there must be a file tests/${NAME}.cpp and a file tests/${NAME}.h.
 set(engine_TEST
 	detection
@@ -114,8 +132,14 @@ if (BUILD_EXAMPLES)
         list(APPEND facedet_required_libs ${OpenCV_LIBS})
         add_executable(facedet_test examples/facedetection_test.cpp)
         target_link_libraries(facedet_test ${facedet_required_libs})
+
+        list(APPEND fa_required_libs ${OpenCV_LIBS} seeta_facedet_lib)
+        add_executable(fa_test examples/face_alignment_test.cpp)
+        target_link_libraries(fa_test ${fa_required_libs})
         enable_testing()
-        add_test(DetectionTest ${EXECUTABLE_OUTPUT_PATH}/facedet_test ${eg_img}/image_0001.png ${dtc_model})
+        message("Press any key to finish the test.")
+        add_test(DetectionTest ${EXECUTABLE_OUTPUT_PATH}/facedet_test ${eg_img}/0_1_1.jpg ${dtc_model})
+        add_test(AlignmentTest ${EXECUTABLE_OUTPUT_PATH}/fa_test  ${dtc_model} ${alg_model} ${eg_img}/image_0001.png)
     endif()
 endif()
 
