@@ -92,17 +92,18 @@ std::string MODEL_DIR = "./model/";
 
 int main(int argc, char* argv[]) {
   // Initialize face detection model
-  seeta::FaceDetection detector("seeta_fd_frontal_v1.0.bin");
+  seeta::FaceDetection detector(argv[1]);
   detector.SetMinFaceSize(40);
   detector.SetScoreThresh(2.f);
   detector.SetImagePyramidScaleFactor(0.8f);
   detector.SetWindowStep(4, 4);
 
   // Initialize face alignment model 
-  seeta::FaceAlignment point_detector("seeta_fa_v1.1.bin");
+  seeta::FaceAlignment point_detector(argv[2]);
 
   // Initialize face Identification model 
-  FaceIdentification face_recognizer((MODEL_DIR + "seeta_fr_v1.0.bin").c_str());
+  FaceIdentification face_recognizer(argv[3]);
+  DATA_DIR = (std::string)argv[4];
   std::string test_dir = DATA_DIR + "test_face_recognizer/";
 
   //load image

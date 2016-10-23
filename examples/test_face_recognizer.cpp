@@ -82,18 +82,18 @@ using namespace std;
 
 using namespace seeta;
 
-#define TEST(major, minor) major##_##minor##_Tester()
+#define TEST(major, minor, model, data) major##_##minor##_Tester(model, data)
 #define EXPECT_NE(a, b) if ((a) == (b)) std::cout << "ERROR: "
 #define EXPECT_EQ(a, b) if ((a) != (b)) std::cout << "ERROR: "
 
-#ifdef _WIN32
-std::string DATA_DIR = "../../data/";
-std::string MODEL_DIR = "../../model/";
-#else
-std::string DATA_DIR = "./data/";
-std::string MODEL_DIR = "./model/";
-#endif
-void TEST(FaceRecognizerTest, CropFace) {
+// #ifdef _WIN32
+// std::string DATA_DIR = "../../data/";
+// std::string MODEL_DIR = "../../model/";
+// #else
+// std::string DATA_DIR = "./data/";
+// std::string MODEL_DIR = "./model/";
+// #endif
+void TEST(FaceRecognizerTest, CropFace, std::string MODEL_DIR, std::string DATA_DIR) {
   FaceIdentification face_recognizer((MODEL_DIR + "seeta_fr_v1.0.bin").c_str());
   std::string test_dir = DATA_DIR + "test_face_recognizer/";
   /* data initialize */
@@ -139,7 +139,7 @@ void TEST(FaceRecognizerTest, CropFace) {
     << 1000.0 * count / CLOCKS_PER_SEC / img_num << "ms" << std::endl;
 }
 
-void TEST(FaceRecognizerTest, ExtractFeature) {
+void TEST(FaceRecognizerTest, ExtractFeature, std::string MODEL_DIR, std::string DATA_DIR) {
   FaceIdentification face_recognizer((MODEL_DIR + "seeta_fr_v1.0.bin").c_str());
   std::string test_dir = DATA_DIR + "test_face_recognizer/";
 
@@ -207,7 +207,7 @@ void TEST(FaceRecognizerTest, ExtractFeature) {
   delete []feat_sdk;
 }
 
-void TEST(FaceRecognizerTest, ExtractFeatureWithCrop) {
+void TEST(FaceRecognizerTest, ExtractFeatureWithCrop, std::string MODEL_DIR, std::string DATA_DIR) {
   FaceIdentification face_recognizer((MODEL_DIR + "seeta_fr_v1.0.bin").c_str());
   std::string test_dir = DATA_DIR + "test_face_recognizer/";
 
@@ -281,8 +281,10 @@ void TEST(FaceRecognizerTest, ExtractFeatureWithCrop) {
 }
 
 int main(int argc, char* argv[]) {
-  TEST(FaceRecognizerTest, CropFace);
-  TEST(FaceRecognizerTest, ExtractFeature);
-  TEST(FaceRecognizerTest, ExtractFeatureWithCrop);
-  return 0;
+    std::string DATA_DIR(argv[1]);
+    std::string MODEL_DIR(argv[2]);
+    TEST(FaceRecognizerTest, CropFace, MODEL_DIR, DATA_DIR);
+    TEST(FaceRecognizerTest, ExtractFeature, MODEL_DIR, DATA_DIR);
+    TEST(FaceRecognizerTest, ExtractFeatureWithCrop, MODEL_DIR, DATA_DIR);
+    return 0;
 }
