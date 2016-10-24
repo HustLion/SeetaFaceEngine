@@ -13,16 +13,47 @@
 
 This face recognition engine is developed by Visual Information Processing and Learning (VIPL) group, Institute of Computing Technology, Chinese Academy of Sciences. The codes are written in C++ without dependence on any 3rd-party libraries. The open source is now released under BSD-2 license (see [LICENSE](LICENSE) for details), which means the codes can be used freely for both acedemic purpose and industrial products.
 
-# Prerequisites
+# Recommended Environment
 
 * OpenCV 3.1.0
+* GCC 5.4
 
-### Contact Info
+
+
+# Build
+
+```shell
+mkdir build
+cd build
+cmake .. 
+make -j 4
+
+```
+
+
+
+Then you can type `ctest` to run examples. This will pop up a window, press any key to close it.
+
+
+
+## Notes
+
+You can specify GCC/CC version by this:
+
+```
+CC=/opt/gcc-5.4.0/bin/gcc CXX=/opt/gcc-5.4.0/bin/g++ cmake ..
+```
+
+
+
+
+
+# Contact Info
 
 If you have any problem on SeetaFace Engine, please contact us by sending email to SeetaFace@vipl.ict.ac.cn.
 
 
-### Other Documentation
+# Other Documentation
 
 * [SeetaFace Detection](./FaceDetection/README.md)
 * [SeetaFace Alignment](./FaceAlignment/README.md)
