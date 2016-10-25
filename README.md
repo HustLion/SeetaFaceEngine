@@ -134,10 +134,10 @@ To read two feature files to compare and output similarity:
 
 # Contact Info
 
-If you have any problem on SeetaFace Engine, please contact us by sending email to SeetaFace@vipl.ict.ac.cn.
+If you have any problem on SeetaFace Engine, please contact us by sending an email to SeetaFace@vipl.ict.ac.cn.
 
 
-# Other Documentation
+# Detailed Documentation
 
 * [SeetaFace Detection](./FaceDetection/README.md)
 * [SeetaFace Alignment](./FaceAlignment/README.md)
