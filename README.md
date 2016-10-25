@@ -110,18 +110,25 @@ To run a single test manually:
 
 ```shell
 ./bin/feature_extractor ./resources/model/seeta_fd_frontal_v1.0.bin ./resources/model/seeta_fa_v1.1.bin ./resources/model/seeta_fr_v1.0.bin ./resources/img/
-
-
-./bin/extract_output ./resources/model/seeta_fd_frontal_v1.0.bin ./resources/model/seeta_fa_v1.1.bin ./resources/model/seeta_fr_v1.0.bin ./resources/img/test_face_recognizer/images/compare_im/Aaron_Peirsol_0001.jpg
 ```
 
 
 
 To extract face features and export as txt:
 
+```shell
+./bin/extract_output ./resources/model/seeta_fd_frontal_v1.0.bin ./resources/model/seeta_fa_v1.1.bin ./resources/model/seeta_fr_v1.0.bin ./resources/img/test_face_recognizer/images/compare_im/Aaron_Peirsol_0001.jpg
+```
+
+
+
 
 
 To read two feature files to compare and output similarity:
+
+```shell
+./bin/compare_features ./resources/model/seeta_fd_frontal_v1.0.bin ./resources/model/seeta_fa_v1.1.bin ./resources/model/seeta_fr_v1.0.bin ./result/Aaron_Peirsol_0001.txt ./result/Aaron_Peirsol_0004.txt
+```
 
 
 
