@@ -20,19 +20,55 @@ This face recognition engine is developed by Visual Information Processing and L
 
 
 
+
+Some examples require [boost](http://www.boost.org/) library.
+
+
+
+> [Boost](http://www.boost.org/) is a collection of peer-reviewed (i.e. very high quality) C++ libraries that help programmers and developers not get caught up in reinventing the wheel. Boost provides implementations for linear algebra, multithreading, basic image processing, and unit testing, just to name a few. [Source](http://www.pyimagesearch.com/2015/04/27/installing-boost-and-boost-python-on-osx-with-homebrew/)
+
+
+
+## OpenCV
+
+### MacOS
+
+You can use brew to install opencv:
+
+```shell
+# opencv2
+brew install homebrew/science/opencv
+# opencv3
+brew install homebrew/science/opencv3
+```
+
+## Boost
+
+### MacOS
+
+You can use brew to install boost:
+```shell
+brew install boost
+```
+
 # Build
+
+
+## Linux & MacOS
+Change current working directory to `SeetaFaceEngine` and run the following command:
 
 ```shell
 mkdir build
 cd build
 cmake .. 
 make -j 4
-
 ```
 
 
 
 Then you can type `ctest` to run examples. This will pop up a window, press any key to close it.
+
+The compiled libraries will be in the `lib` directory under you `build` directory.
 
 
 
@@ -42,6 +78,18 @@ You can specify GCC/CC version by this:
 
 ```
 CC=/opt/gcc-5.4.0/bin/gcc CXX=/opt/gcc-5.4.0/bin/g++ cmake ..
+```
+
+
+
+# Usage
+
+Just include corresponding cpp header file in your code:
+
+```shell
+#include "face_identification.h"
+#include "face_detection.h"
+#include "face_alignment.h"
 ```
 
 
