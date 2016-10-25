@@ -107,6 +107,7 @@ int main(int argc, char* argv[]) {
 
     //load image
     cv::Mat gallery_img_color = cv::imread((std::string)argv[4], 1);
+    char *featureFile = argv[5];
     cv::Mat gallery_img_gray;
     cv::cvtColor(gallery_img_color, gallery_img_gray, CV_BGR2GRAY);
 
@@ -136,14 +137,9 @@ int main(int argc, char* argv[]) {
     face_recognizer.ExtractFeatureWithCrop(gallery_img_data_color, gallery_points, gallery_fea);
 
     // write features to file
-    FILE *outfile = fopen("feature.txt", "wb");
+    FILE *outfile = fopen(featureFile, "wb");
     fwrite(gallery_fea, sizeof(gallery_fea), 1, outfile);  
     fclose(outfile);
-
-    // read features from file
-    FILE *infile = fopen("feature.txt", "rb");
-    float ptemp[2048];
-    fread(ptemp, sizeof(gallery_fea), 1, infile);
 
     return 0;
 }
