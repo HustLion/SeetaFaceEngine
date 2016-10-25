@@ -165,12 +165,17 @@ int main(int argc, char* argv[]) {
     face_recognizer.ExtractFeatureWithCrop(probe_img_data_color, probe_points, probe_fea);
 
     // write features to file
-    FILE *outfile = fopen("feature.txt", "w");
+    FILE *outfile = fopen("feature.txt", "wb");
     fwrite(gallery_fea, sizeof(gallery_fea), 1, outfile);  
     fclose(outfile);
 
+    // read features from file
+    FILE *infile = fopen("feature.txt", "rb");
+    float ptemp[2048];
+    fread(ptemp, sizeof(gallery_fea), 1, infile);
     // Caculate similarity of two faces
-    float sim = face_recognizer.CalcSimilarity(gallery_fea, probe_fea);
+    // float sim = face_recognizer.CalcSimilarity(gallery_fea, probe_fea);
+    float sim = face_recognizer.CalcSimilarity(ptemp, probe_fea);
     std::cout << sim <<endl;
 
     return 0;

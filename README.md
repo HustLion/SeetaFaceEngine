@@ -94,6 +94,24 @@ Just include corresponding cpp header file in your code:
 
 
 
+# Examples
+
+
+
+To run a single test, e.g., `FeatureExtractTest`:
+
+```shell
+ctest -R FeatureExtractTest
+```
+
+
+
+To run a single test manually:
+
+```shell
+./bin/feature_extractor ./resources/model/seeta_fd_frontal_v1.0.bin ./resources/model/seeta_fa_v1.1.bin ./resources/model/seeta_fr_v1.0.bin ./resources/img/
+```
+
 
 
 # Contact Info
