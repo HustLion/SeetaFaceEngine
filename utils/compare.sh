@@ -49,5 +49,6 @@ do
     echo $file >> filelist.txt
 done
 
-paste tmp.txt filelist.txt | sort -n | tail -1
+paste tmp.txt filelist.txt | sort -n | tail -1 
+# > result.txt
 
