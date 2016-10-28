@@ -117,7 +117,10 @@ To run a single test manually:
 To extract face features and export as txt:
 
 ```shell
-./bin/extract_output ./resources/model/seeta_fd_frontal_v1.0.bin ./resources/model/seeta_fa_v1.1.bin ./resources/model/seeta_fr_v1.0.bin ./resources/img/test_face_recognizer/images/compare_im/Aaron_Peirsol_0001.jpg
+./bin/extract_output ./resources/model/seeta_fd_frontal_v1.0.bin ./resources/model/seeta_fa_v1.1.bin ./resources/model/seeta_fr_v1.0.bin ./resources/img/test_face_recognizer/images/compare_im/Aaron_Peirsol_0001.jpg ./result/Aaron_Peirsol_0001.txt
+
+# run from other folders e.g. ../util
+../build/bin/extract_output ../build/resources/model/seeta_fd_frontal_v1.0.bin ../build/resources/model/seeta_fa_v1.1.bin ../build/resources/model/seeta_fr_v1.0.bin ../build/resources/img/test_face_recognizer/images/compare_im/Aaron_Peirsol_0001.jpg ../build/result/Aaron_Peirsol_0001_2.txt
 ```
 
 
